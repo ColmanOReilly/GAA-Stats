@@ -1,0 +1,118 @@
+<?php
+//Start a session
+session_start();
+if (isset($_SESSION['AdminUser'])) // admin session
+{
+$_SESSION['AdminUser']=$_SESSION['AdminUser']+1;
+ }
+ else {
+echo '<meta http-equiv="Refresh" content="0;url=Index.html" />';
+}
+ $FN = $SN = $PS = $HR = $FR = $YR = "";
+ $firstname = $secondname = $pass = $hurler = $football = $year = "";
+?>
+<?php	
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Form Validation
+    if (empty($_POST["FirstName"])) { // gets info from field
+        $firstname = "Enter First Name"; // if it is empty
+    } else {
+        $FN= ($_POST['FirstName']); // give it this variable
+    }
+    if (empty($_POST["SecondName"])) { // gets info from field
+        $secondname = "Enter Second Name"; // if it is empty
+    } else {
+        $SN = ($_POST['SecondName']); // gives it this variable
+    }
+	if (empty($_POST["Position"])) { // gets info from the field
+        $pass = "Enter Position"; // if it is empty
+    } else {
+        $PS= ($_POST['Position']); // gives it this variable
+    }
+    if (empty($_POST["Hurler"])) { // gets info from field
+        $hurler = "Enter Yes or No"; // if it is empty
+    } else {
+        $HR = ($_POST['Hurler']); // gives it this variable
+    }
+	if (empty($_POST["Footballer"])) { // gets info from field
+        $football = "Enter Yes or No"; // if it is empty
+    } else {
+        $FR = ($_POST['Footballer']); // gives it this variable
+    }
+	if (empty($_POST["Year"])) { // gets info from field
+        $year = "Enter Year"; // if it is empty
+    } else {
+        $YR = ($_POST['Year']); // gives it this variable
+    }
+	
+}
+	if(isset($_POST['Add'])) // add button pressed
+{ 
+if ($FN && $SN && $SN && $HR && $FR && $YR!= null){
+include("Connection.php"); // open connection
+ 
+ echo $FN." Is now a new memebr to your squad! ";
+ 
+$res =mysqli_query($conn,"CALL New_Player('$FN', '$SN', '$PS',  '$HR', '$FR', '$YR')"); // query to add the new player
+mysqli_close($conn);// close the connection
+  }
+  }
+?>	
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add Player</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+</head>
+<body>
+<div class="container1">
+<div id="header"></br></br></br> </div>
+<div id="header1"><h1><b>Add a New Player to the Squad!</b></h1> </div>
+<div class="right">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+	First Name:(Colman)<br />
+	<input name="FirstName" type="text" size="30" maxlength="30" /><span ><?php echo $firstname ?></span><br />
+	Second Name:(OReilly,ODonovan)<br />
+	<input name="SecondName" type="text" size="30" maxlength="30" /><span ><?php echo $secondname ?></span><br />
+	Position:(Back,Forward,etc)<br />
+	<input name="Position" type="text" size="30" maxlength="30" /><span ><?php echo $pass ?></span><br />
+Hurler:(Yes or No)<br />
+	<input name="Hurler" type="text" size="30" maxlength="30" /><span ><?php echo $hurler ?></span><br />
+Footballer:(Yes or No)<br />
+	<input name="Footballer" type="text" size="30" maxlength="30" /><span ><?php echo $football ?></span><br />
+Year Born: (1990 etc)<br />
+	<input name="Year" type="text" size="30" maxlength="30" /><span ><?php echo $year ?></span><br />	<br />
+	
+  <input name="Add" type="submit" style="width:100px; height:30px;" value="Add" />
+  
+ 
+
+ </form>
+</br>
+  </div>
+  <div class="button1">
+<img src="images/haulie.jpg" width="350" height="400"/>
+</div> 
+   Click here to go back to <a href="Squad.php"> Squad Page</a><br />
+Click here to <a href="Logout.php"> LOGOUT</a>
+ <div class="Bottom">
+Copyright: 2013
+</div> 
+</div>
+</form>
+</body>
+</html>
