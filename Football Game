@@ -1,0 +1,430 @@
+<?php
+//Start a session
+session_start(); 
+if (isset($_SESSION['Number'])) // session that was got from id of previous page
+{
+$GameNumber =  $_SESSION['Number']; //Get the select criteria from the query
+	}
+	else
+	{
+    header('Location: Index.html'); //display the restricted page
+	}	
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Football Game</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+</head>
+<body>
+<div class="container1">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<div id="header"> </div>
+<div id="header1"><h1><b>Football Match</b></h1> </div>
+</br >  <input  name= 'Start' type='submit' style="width:200px; height:40px;" value='Start Game' />
+</br >
+
+<div class="left">
+<h3> Away Team </h3>
+ <input name="AwayGoal" type="submit" style="width:100px; height:30px;" value="Goal" /> &nbsp
+<input name="AwayPoint" type="submit" style="width:100px; height:30px;" value="Point" />
+</div>
+
+<div class="right">
+<h3> Home Team</h3>
+<?php	
+echo "Please select the player that performaned the task!</br>";
+ include("Connection.php"); // include connection
+    // Successful query?
+    if($result = mysqli_query($conn,"CALL `PickPlayers`('no')"))  {
+        // Start combo-box
+        echo "<select name='player' >";
+        // For each item in the results...
+		while($data = mysqli_fetch_array($result))
+		{
+         echo ('<option value='.$data[0].'>'. $data[1].' '.$data[2].'</option>');
+        }
+        echo "</select>\n";
+    }
+    // Error in the database
+    else { echo "Failed to connect to database."; }
+
+    echo "</br>";
+	mysqli_close($conn); // close the connection
+?>
+<input name="Point" type="submit" style="width:100px; height:30px;" value="Point" />&nbsp&nbsp
+<input name="Goal" type="submit" style="width:100px; height:30px;" value="Goal" />&nbsp&nbsp
+<input name="PointFree" type="submit" style="width:100px; height:30px;" value="Point-Free" />&nbsp&nbsp
+<input name="GoalFree" type="submit" style="width:100px; height:30px;" value="Goal-Free" />&nbsp&nbsp
+<input name="MissedFree" type="submit" style="width:100px; height:30px;" value="Missed-Free" />&nbsp&nbsp
+<input name="Scored45" type="submit" style="width:100px; height:30px;" value="Scored-45" />&nbsp&nbsp
+<input name="Missed45" type="submit" style="width:100px; height:30px;" value="Missed-45" />&nbsp&nbsp
+<input name="PenPoint" type="submit" style="width:100px; height:30px;" value="Pen-Point" />&nbsp&nbsp
+<input name="GoalPen" type="submit" style="width:100px; height:30px;" value="Goal-Pen" />&nbsp&nbsp
+<input name="YellowCard" type="submit" style="width:100px; height:30px;" value="Yellow-Card" />&nbsp&nbsp
+<input name="RedCard" type="submit" style="width:100px; height:30px;" value="Red-Card" />&nbsp&nbsp
+<input name="Freewon" type="submit" style="width:100px; height:30px;" value="Free-Won" />&nbsp&nbsp
+<input name="FreeLost" type="submit" style="width:100px; height:30px;" value="Free-Lost" /></br>
+ 
+</div>
+
+ <?php
+	//////////////////////////////////////////////////////
+	// WHEN THE HOME POINT BUTTON IS HIT
+	if(isset($_POST['Point'])) 
+{ 
+echo "A point has been scored!";
+include("Connection.php");
+$p = ($_POST['player']); // This is getting player that scored
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Home_point FROM fixtures where GameID='".$GameNumber."'")) ;
+	// query to select points value
+	$points = $res[0][0];
+ $points += 1 ; // add 1 to the value
+ echo "</br></br> </br></br></br></br> </br></br>";
+echo "Shanballymore have scored a point they now have ".$points." points";
+$res = mysqli_query($conn, "UPDATE fixtures  SET Home_point = '".$points."' where GameID= '".$GameNumber."'") ;
+// udate value with new point value
+mysqli_close($conn);
+	}
+?>
+ 
+ <?php	
+ //////////////////////////////////////////////////////
+	// WHEN THE HOME GOAL BUTTON IS HIT
+ if(isset($_POST['Goal']))
+ { 
+include("Connection.php");
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Home_goal FROM fixtures where GameID='".$GameNumber."'")) ;
+	$points = $res[0][0];
+ $points += 1 ;
+  echo "</br></br> </br></br></br></br> </br></br>";
+echo "Shanballymore have scored a goal they now have ".$points." goals";
+$res = mysqli_query($conn, "UPDATE fixtures  SET Home_goal = '".$points."' where GameID= '".$GameNumber."'") ;
+mysqli_close($conn);
+
+	}
+?>
+
+	 <?php	
+ //////////////////////////////////////////////////////
+	// WHEN THE HOME GOAL BUTTON IS HIT
+ if(isset($_POST['Goal']))
+ { 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+
+
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Goal FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$pointfree = $res[0][0];
+ $pointfree += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Goal = '".$pointfree."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+
+	}
+?>
+	 <?php	
+ //////////////////////////////////////////////////////
+	// WHEN THE  HOME POINT BUTTON IS HIT
+ if(isset($_POST['Point']))
+ { 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+
+
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Point FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$pointfree = $res[0][0];
+ $pointfree += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Point = '".$pointfree."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+
+	}
+?>
+<?php	
+	//////////////////////////////////////////////////////
+	// WHEN THE PointFree BUTTON IS HIT
+if(isset($_POST['PointFree'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+
+
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Points_free FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$pointfree = $res[0][0];
+ $pointfree += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Points_free = '".$pointfree."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+
+	}
+?>
+	
+<?php
+	//////////////////////////////////////////////////////
+	// WHEN THE GoalFree BUTTON IS HIT
+if(isset($_POST['GoalFree'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+
+
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Goal_free FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$goalfree = $res[0][0];
+ $goalfree += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Goal_free = '".$goalfree."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+
+	}	
+?>	
+<?php
+	//////////////////////////////////////////////////////
+	// WHEN THE MissedFree BUTTON IS HIT
+if(isset($_POST['MissedFree'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+
+
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Mised_free FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$missedfree = $res[0][0];
+ $missedfree += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Mised_free = '".$missedfree."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+
+	}
+	?>	
+	<?php
+//////////////////////////////////////////////////////
+	// WHEN THE Scored45 BUTTON IS HIT
+if(isset($_POST['Scored45'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Scored_45 FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$S45 = $res[0][0];
+ $S45 += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Scored_45 = '".$S45."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+}
+	?>	
+	<?php
+//////////////////////////////////////////////////////
+	// WHEN THE Missed45 BUTTON IS HIT
+if(isset($_POST['Missed45'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Missed_45 FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$m45 = $res[0][0];
+ $m45 += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Missed_45 = '".$m45."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);	
+}
+?>	
+	<?php	
+//////////////////////////////////////////////////////
+	// WHEN THE PenPoint BUTTON IS HIT
+if(isset($_POST['PenPoint'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Pen_point FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$pp = $res[0][0];
+ $pp += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Pen_point = '".$pp."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+}	
+	?>	
+	<?php
+//////////////////////////////////////////////////////
+	// WHEN THE GoalPen BUTTON IS HIT
+if(isset($_POST['GoalPen'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Goal_pen FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$gp = $res[0][0];
+ $gp += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Goal_pen = '".$gp."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+}	
+		?>	
+	<?php
+	
+//////////////////////////////////////////////////////
+	// WHEN THE YellowCard BUTTON IS HIT
+if(isset($_POST['YellowCard'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Yellow_card FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$yc = $res[0][0];
+ $yc += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Yellow_card = '".$yc."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);	
+}
+	
+?>	
+	<?php	
+//////////////////////////////////////////////////////
+	// WHEN THE RedCard BUTTON IS HIT
+if(isset($_POST['RedCard'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Red_card FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$rc = $res[0][0];
+ $rc += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Red_card = '".$rc."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+}
+
+	?>	
+	<?php
+//////////////////////////////////////////////////////
+	// WHEN THE Freewon BUTTON IS HIT
+if(isset($_POST['Freewon'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Frees_won FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$fw = $res[0][0];
+ $fw += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Frees_won = '".$fw."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);	
+}
+
+		?>	
+	<?php
+//////////////////////////////////////////////////////
+	// WHEN THE FreeLost BUTTON IS HIT
+if(isset($_POST['FreeLost'])) 
+{ 
+include("Connection.php");
+
+$pf = ($_POST['player']);
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Frees_lost FROM player_stats where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'")) ;
+
+	$fl = $res[0][0];
+ $fl += 1 ;
+$res = mysqli_query($conn, "UPDATE player_stats SET Frees_lost = '".$fl."' where Fixtures_GameID='".$GameNumber."' and Player_ID_Player_ID='".$pf."'") ;
+mysqli_close($conn);
+}
+?>	
+
+	
+<?php
+/////////////////////////////////////////////////////	
+// WHEN THE AWWAYGOAL BUTTON IS HIT FOR THE AWAY TEAM
+	if(isset($_POST['AwayGoal'])) 
+{
+ include("Connection.php");
+$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Away_goal FROM fixtures where GameID='".$GameNumber."'")) ;
+// GETS THE VALUE IN THIS SECTION 
+	$AG = $res[0][0];
+ $AG += 1 ; // ADDS 1 TO THIS VALUE
+echo "</br></br> </br></br></br></br> </br></br>";
+echo "A goal has been scored they now have ".$AG." goals";
+$res = mysqli_query($conn, "UPDATE fixtures  SET Away_goal = '".$AG."' where GameID= '".$GameNumber."'") ;
+// UDATE THE VALUE OF THE POINTS
+mysqli_close($conn);
+	}
+	 ?>	
+<?php
+/////////////////////////////////////////////////////	
+// WHEN THE AWAYPOINT BUTTON IS HIT FOR THE AWAY TEAM
+	if(isset($_POST['AwayPoint'])) 
+{ 
+ include("Connection.php");
+	$res = mysqli_fetch_array(mysqli_query($conn, "SELECT Away_point FROM fixtures where GameID='".$GameNumber."'")) ;
+// GETS THE VALUE IN THIS SECTION 
+	$points = $res[0][0];
+ $points += 1 ; // ADDS 1 TO THIS VALUE
+echo "</br></br> </br></br></br></br> </br></br>";
+echo "A goal has been scored they now have ".$points." points";
+$res = mysqli_query($conn, "UPDATE fixtures  SET Away_point = '".$points."' where GameID= '".$GameNumber."'") ;
+// UDATE THE VALUE OF THE POINTS
+mysqli_close($conn);
+	}
+	
+ ?>	
+<?php	
+/////////////////////////////////////////////////////	
+// WHEN THE START BUTTON IS HIT
+	if(isset($_POST['Start'])) 
+{ 
+ include("Connection.php");
+
+ $result = mysqli_query($conn,"CALL `PickPlayers`('no')");
+ $num=mysqli_num_rows($result);
+
+if ($num ) //If an empty recordset has not been returned
+{
+$j=0;
+while ($row = mysqli_fetch_array($result)) 
+{
+mysqli_close($conn);
+include("Connection.php");
+
+$INSERT = mysqli_query($conn,"INSERT INTO player_stats (Player_ID_Player_ID, Fixtures_GameID) VALUES (".$row['0'].",".$GameNumber.")");
+$j++;
+
+}
+}
+mysqli_close($conn);
+	}
+	 ?>	
+	 <?php	
+	  if(isset($_POST['EndGame'])) // if EndGame button is pressed
+{ 
+  header('Location: HomePage.php'); //display the restricted page
+ }
+  ?>	
+ <input  name= 'EndGame' type='submit' style="width:200px; height:40px;" value='End Game' />
+</br > </br ></br > </br ></br > </br >
+
+
+  <div class="Bottom">
+Copyright: 2013
+</div>
+</div>
+
+</form>
+</body>
+</html>
