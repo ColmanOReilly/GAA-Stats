@@ -1,0 +1,134 @@
+<?php
+//Start a session
+session_start();
+if (isset($_SESSION['AdminUser'])) // ADMIN SESSION
+{
+$_SESSION['AdminUser']=$_SESSION['AdminUser']+1;
+}
+else {
+echo '<meta http-equiv="Refresh" content="0;url=Index.html" />';
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Retire</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+</head>
+<body>
+<div class="container1">
+<div id="header"></div>
+<div id="header1"><h1><b>Retiring a Player!</b></h1> </div>
+Please select the player that you would like to retire from the Squad! 
+<div class="right">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<?php
+    // Form a query to populate the combo-box
+include("Connection.php");
+    // Successful query?
+    if($result = mysqli_query($conn,"CALL `PickPlayers`('no')"))  { // query show layers that are not retired
+        // Start combo-box name
+        echo "<select name='id' >";
+        // For each item in the results...
+		while($data = mysqli_fetch_array($result))
+		{
+         echo ('<option value='.$data[0].'>'. $data[1].' '.$data[2].'</option>'); //shows first and second name
+        }
+        echo "</select>\n";
+    }
+    // Error in the database
+    else { echo "Failed to connect to database."; }
+    // Add a submit button to the form
+    echo "<input  name= 'Submit' type='submit' value='Submit' />";
+	mysqli_close($conn);	
+?>
+<?php
+if(isset($_POST['Submit'])) // when submit button is pressed
+{ 
+include("Connection.php"); // include connection
+echo "<h3> If you are happy with this selection please hit the Retire Button!</h3>";
+$LID = ($_POST['id']); // get id 
+$result = mysqli_query($conn,"CALL `Show_Player_Toretire`('$LID')"); // query to show the player
+		$num=mysqli_num_rows($result);
+	if ($result)
+	{
+	//A non NULL value is entered as the selection criteria
+	//The QUERY can be processed
+
+		if ($num) //If an empty recordset has not been returned
+		{
+		///OUTPUT THE DATA
+		//Set up table headings
+		echo "<table border=1>";
+		echo "<tr>";
+		echo '<td>First Name</td>';
+		echo '<td>Second Name</td>';
+		echo '<td>Position</td>';
+		echo '<td>Hurler</td>';
+		echo '<td>Footballer</td>';
+		echo '<td>Year Born</td>';
+		
+		echo '<tr>';
+
+		//Display data returned by the query
+		//This code allows for possibility of more than one row
+		//to be returned by the query
+		$j=0;
+while ($row = mysqli_fetch_array($result)) 
+			{
+			echo "<tr>";
+			echo '<td>'.$row['0'].'</td>';
+			echo '<td>'.$row['1'].'</td>';
+			echo '<td>'.$row['2'].'</td>';
+			echo '<td>'.$row['3'].'</td>';
+			echo '<td>'.$row['4'].'</td>';
+			echo '<td>'.$row['5'].'</td>';
+			echo '</tr>';
+			$j++;
+			}
+			echo "</table>";
+			echo "<br />";
+			}
+			$button = '<input name="Retire" type="submit" style="width:100px; height:30px;" value="Retire" /> <br /><br />';
+			echo $button;
+		}
+  mysqli_close($conn); // close connection
+  }
+  ?>
+</div>
+<div class="button1">
+<img src="images/eoin.jpg" width="350" height="300"/>
+  </div>
+ </br></br> </br> Click here to go back to <a href="Squad.php"> Squad Page</a><br />
+Click here to <a href="Logout.php"> LOGOUT</a> </br></br> </br>  </br></br></br> </br> </br></br> </br>  
+ <div class="Bottom">
+Copyright: 2012
+</div> 
+</div>
+<?php
+if(isset($_POST['Retire'])) // when the retire button is presseed
+{ 
+include("Connection.php"); // include connection
+$LID = ($_POST['id']); // get id from combo box
+$result = mysqli_query($conn,"CALL `Retire_Player`('$LID','Yes')"); // query to retire the player
+//close the database and server connection
+mysqli_close($conn);
+}
+?>
+</form>
+</body>
+</html>
