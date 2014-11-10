@@ -1,0 +1,85 @@
+<?php
+//Start a session
+session_start();
+if (isset($_SESSION['Users']))
+{
+$_SESSION['Users']=$_SESSION['Users']+1;
+include("Connection.php");
+
+
+
+if(isset($_POST['Squad'])) // if SQUAD button is pressed
+{ 
+  header('Location: Usersquad.php'); //display the restricted page
+ }
+ 
+ if(isset($_POST['PlayerStatus'])) // if PlayerStatus button is pressed
+{ 
+  header('Location: HurlorFootUser.php'); //display the restricted page
+ }
+ 
+ 
+ if(isset($_POST['Hurling'])) // if Hurling button is pressed
+{ 
+  header('Location: HurlingUser.php'); //display the restricted page
+ }
+ if(isset($_POST['Football'])) // if Football button is pressed
+{ 
+  header('Location: FootballUser.php'); //display the restricted page
+ }
+ }
+ else
+	{
+    header('Location: Index.html'); //display the restricted page
+	}
+?>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Home Page</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+</head>
+<body>
+
+
+<div class="container1">
+<div id="header"></br></br> </div>
+<div id="header1"><h1><b>Welcome To Shanballymore GAA</b></h1> </div>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<div class= "button1">
+  <input name="Squad" type="submit" style="width:200px; height:60px;" value="Squad" /><br /><br />
+  
+ <input name="PlayerStatus" type="submit" style="width:200px; height:60px;" value="Player Status" /><br /><br />
+ 
+ </div> 
+ 
+ <div class= "button2">
+ <input name="Hurling" type="submit" style="width:200px; height:60px;" value="Hurling" /><br /><br />
+ 
+    <input name="Football" type="submit" style="width:200px; height:60px;" value="Football" /><br /><br />
+	
+ </div> 
+ 
+ 
+Click here to <a href="Logout.php"> LOGOUT</a>
+  <div class="Bottom">
+Copyright: 2013
+</div>
+</div>
+
+</form>
+</body>
+</html>
