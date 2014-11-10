@@ -1,0 +1,246 @@
+<?php
+//Start a session
+session_start();
+if (isset($_SESSION['AdminUser'])) // admin session 
+{
+$_SESSION['AdminUser']=$_SESSION['AdminUser']+1;
+}
+else
+	{
+    header('Location: Index.html'); //display the restricted page
+	}
+ $Number = $Team = $ATeam = $TeamHome = $Year = "";
+ $nr = $tm = $at = $th =  $yr = "";
+?>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Form Validation
+    if (empty($_POST["Number"])) { // gets info from field
+        $nr = "Enter Number"; // if it is empty
+    } else {
+        $Number= ($_POST['Number']); // give it this variable
+    }
+    if (empty($_POST["team"])) { // gets info from field
+        $tm = "Enter Team Name"; // if it is empty
+    } else {
+        $Team = ($_POST['team']); // gives it this variable
+    }
+	if (empty($_POST["tm"])) { // gets info from the field
+        $at = "Enter Team Name"; // if it is empty
+    } else {
+        $ATeam= ($_POST['tm']); // gives it this variable
+    }
+    if (empty($_POST["homeclub"])) { // gets info from field
+        $th = "Enter Yes or No"; // if it is empty
+    } else {
+        $TeamHome = ($_POST['homeclub']); // gives it this variable
+    }
+	if (empty($_POST["Year"])) { // gets info from field
+        $yr = "Enter Year"; // if it is empty
+    } else {
+        $Year = ($_POST['Year']); // gives it this variable
+    }
+	
+}
+if(isset($_POST['Championship'])) // if Championship button is pressed
+{ 
+include("Connection.php"); // open connection
+//Get the values from the new user form
+      if ($Number && $Team && $ATeam && $TeamHome && $Year != null){
+	if ($Team!=$ATeam){ //  if the team names are not the same 
+		echo "Team names not the same not the same";
+	}
+	else {
+	
+	$result =mysqli_query ($conn,"CALL `Start_Foot_Champ`('$Number','$Team','$TeamHome','Yes','Yes','$Year')");
+	// start the football match	
+	}
+		$LID = ($_POST['Number']);
+ $_SESSION['Number']=$LID;
+	
+  header('Location: FootballGame.php'); //display the restricted page
+  mysqli_close($conn); // close the connection
+}
+}
+
+?>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Form Validation
+    if (empty($_POST["Number"])) { // gets info from field
+        $nr = "Enter Number"; // if it is empty
+    } else {
+        $Number= ($_POST['Number']); // give it this variable
+    }
+    if (empty($_POST["team"])) { // gets info from field
+        $tm = "Enter Team Name"; // if it is empty
+    } else {
+        $Team = ($_POST['team']); // gives it this variable
+    }
+	if (empty($_POST["tm"])) { // gets info from the field
+        $at = "Enter Team Name"; // if it is empty
+    } else {
+        $ATeam= ($_POST['tm']); // gives it this variable
+    }
+    if (empty($_POST["homeclub"])) { // gets info from field
+        $th = "Enter Yes or No"; // if it is empty
+    } else {
+        $TeamHome = ($_POST['homeclub']); // gives it this variable
+    }
+	if (empty($_POST["Year"])) { // gets info from field
+        $yr = "Enter Year"; // if it is empty
+    } else {
+        $Year = ($_POST['Year']); // gives it this variable
+    }
+	
+}
+if(isset($_POST['League'])) // if League button is pressed
+{ 
+include("Connection.php"); // open connection
+//Get the values from the new user form
+    if ($Number && $Team && $ATeam && $TeamHome && $Year != null){
+	if ($Team!=$ATeam){ //  if the team names are not the same 
+	echo "Team names not the same not the same";
+	}
+	else {
+	
+		$result =mysqli_query ($conn,"CALL `Start_Foot_Leag`('$Number','$Team','$TeamHome','Yes','Yes','$Year')");
+	// start the football match
+		
+	}
+		$LID = ($_POST['Number']);
+ $_SESSION['Number']=$LID;
+	
+  header('Location: FootballGame.php'); //display the restricted page
+mysqli_close($conn); // close the connection
+}
+}
+
+?>
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Form Validation
+    if (empty($_POST["Number"])) { // gets info from field
+        $nr = "Enter Number"; // if it is empty
+    } else {
+        $Number= ($_POST['Number']); // give it this variable
+    }
+    if (empty($_POST["team"])) { // gets info from field
+        $tm = "Enter Team Name"; // if it is empty
+    } else {
+        $Team = ($_POST['team']); // gives it this variable
+    }
+	if (empty($_POST["tm"])) { // gets info from the field
+        $at = "Enter Team Name"; // if it is empty
+    } else {
+        $ATeam= ($_POST['tm']); // gives it this variable
+    }
+    if (empty($_POST["homeclub"])) { // gets info from field
+        $th = "Enter Yes or No"; // if it is empty
+    } else {
+        $TeamHome = ($_POST['homeclub']); // gives it this variable
+    }
+	if (empty($_POST["Year"])) { // gets info from field
+        $yr = "Enter Year"; // if it is empty
+    } else {
+        $Year = ($_POST['Year']); // gives it this variable
+    }
+	
+}
+if(isset($_POST['Challenge'])) // if Challenge button is pressed
+{ 
+include("Connection.php"); // open connection
+//Get the values from the new user form
+     if ($Number && $Team && $ATeam && $TeamHome && $Year != null){
+	if ($Team!=$ATeam){ //  if the team names are not the same 
+	echo "Team names not the same not the same";
+	}
+	else {
+	
+		$result =mysqli_query ($conn,"CALL `Start_Foot_Chall`('$Number','$Team','$TeamHome','Yes','Yes','$Year')");
+	// start football game
+	}
+	$LID = ($_POST['Number']);
+ $_SESSION['Number']=$LID;
+	
+  header('Location: FootballGame.php'); //display the restricted page
+mysqli_close($conn); // close connection
+}
+}
+
+
+
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Start Football</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+</head>
+<body>
+
+
+<div class="container1">
+<div id="header"></br></br> </div>
+<div id="header1"><h1><b>Start Football Match!</b></h1> </div>
+<div class="left">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<input name="Championship" type="submit" style="width:150px; height:40px;" value="Championship" /><br /><br />
+  
+ <input name="League" type="submit" style="width:150px; height:40px;" value="League " /><br /><br />
+ 
+ <input name="Challenge" type="submit" style="width:150px; height:40px;" value="Challenge" /><br /><br />
+
+ <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+
+</div>
+<div class="right">
+<h2>Enter the oppostion team here:</h2>
+
+Enter Game Number:<br />
+	<input name="Number" type="int" size="30" maxlength="30" /><span ><?php echo $nr ?></span><br /><br />
+
+	Opposition Team Name:<br />
+	<input name="team" type="text" size="30" maxlength="30" /><span ><?php echo $tm ?></span><br /><br />
+
+Renter Opposition Team Name:<br />
+	<input name="tm" type="text" size="30" maxlength="30" /><span ><?php echo $at ?></span><br /><br />
+	
+Please Enter Your Club:(Shanballymore)<br />
+	<input name="homeclub" type="text" size="30" maxlength="30" /><span ><?php echo $th ?></span><br /><br />
+	Enter Year:(2013)<br />
+	<input name="Year" type="text" size="30" maxlength="30" /><span ><?php echo $yr ?></span>
+	
+</form>
+</br>
+
+</div>
+ </br> Click here to go back to <a href="HomePage.php"> HomePage</a><br />
+Click here to <a href="Logout.php"> LOGOUT</a></br></br></br></br>
+<br /><br /><br />
+<div class="Bottom">
+Copyright: 2013
+</div>
+
+</div>
+
+
+
+</form>
+</body>
+</html>
