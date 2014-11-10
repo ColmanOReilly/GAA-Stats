@@ -1,0 +1,105 @@
+
+<?php
+//Start a session
+session_start();
+//Setup and use a tracking variable to count login attempts 
+if(isset($_SESSION['logoncount'])) {
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Welcome</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+    height: 100px;
+  }
+ </style>
+</head>
+<body>
+
+
+<div class="container1"> 
+<div id="header"></br></br> </div>
+<div id="header1"><h1><b>Welcome</b></h1> </div>
+
+<div class= "button1">
+<img src="images/crest.png" width="270" height="230"/><br /><br />
+
+</div>
+
+<div class= "right">
+<h1>Analysts User:</h1>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+Analysts:<br />
+	<input name="Username" type="text" size="30" maxlength="30" /><br />
+Password:<br />
+	<input name="Password" type="password" size="30" maxlength="30" /><br />
+	<input name="Submit1" type="submit" style="width:100px; height:30px;" value="Login" /><br /><br />
+<?php
+	if(isset($_POST['Submit1']))   //Check if the login form has been submitted for the ADMIN
+{   
+	include("Connection.php"); // open connection
+	
+	//Get the values from the new user form
+	$pw = MD5($_POST['Password']); //Note use of MD5 hash function
+	$admin = $_POST['Username'];
+	
+	//Set up and execute the INSERT query
+	 $result=mysqli_query($conn,"CALL Admin_Login('$admin','$pw')"); //Get the query result
+	$num=mysqli_fetch_assoc($result);  //Get number of records returned 
+	
+	if ($num)  //Logon is successful - redirect to restricted home page
+	{
+		$_SESSION['userid']=$admin ; //Save the username in a session variable
+		if(isset($_SESSION['AdminUser']))
+			{$_SESSION['AdminUser'] = $_SESSION['AdminUser']+ 1;}
+		else
+			{$_SESSION['AdminUser'] = 1;} //set the session variable AdminUser
+			unset($_SESSION['logoncount']);//Unset the logon tracking count
+			header('Location: HomePage.php'); //display the restricted page
+			exit();
+	}
+	else	//Logon has failed - reload the logon page
+	{
+		unset($_SESSION['AdminUser']);
+		echo "<h3>Invalid logon attempt-Please Try Again</h3>";
+	}
+}
+?>
+
+
+
+</div>
+
+
+
+Click here to go back to <a href="Index.html"> Main Page!</a>
+<div class="Bottom">
+Copyright: 2013
+</div>
+
+</div>
+
+</form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
