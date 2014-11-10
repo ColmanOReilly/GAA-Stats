@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Welcome</title>
+ 
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS4.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+    height: 100px;
+  }
+ </style>
+ </head>
+ <body>
+ 
+<div class="container1"> 
+<div id="header"></br> </div>
+<div id="header1"><h1><b>Welcome To Shanballymore GAA</b></h1> </div>
+
+
+<h3>Please Selet one of the following!</h3></br>
+  
+ <div class= "right">
+<a href="LoginAdmin.php"> Analysts Log-on</a>
+<img src="images/crest.png" width="300" height="280"/>
+</div>
+ <div class= "right">
+<a href="LoginUser.php">User Log-on</a>
+<img src="images/crest.png" width="300" height="280"/>
+</div>
+ <a href='http://www.facebook.com//'>Follow Us on Facebook</a></br> <a href='https://twitter.com/'>Follow Us on Twitter</a>;
+  <div class="Bottom">
+Copyright: 2013
+</div>
+</div>
+</body>
+</html>
