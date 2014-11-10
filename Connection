@@ -1,0 +1,27 @@
+<?php
+
+//Set connection parameters
+$dbhost = "localhost";
+$dbuser = "colman";
+$dbpass = "colman15oreilly"; 
+$dbname = "shanballymore";
+
+//make the connection to MySQL Server
+$conn=mysqli_connect($dbhost,$dbuser,$dbpass,$dbname); 
+
+//check and display the connection status
+//if the connection is unsuccessful an error message is displayed
+
+if (!$conn) 
+	{
+	die("<h2><font color=#FF0000><blink>Error! :</blink></font>".mysqli_error()."</h2>");
+	}	//Connection to the MySQL server has failed. Display the error message
+
+
+//select the database
+//if database does not exist an error message is displayed
+//
+@mysqli_select_db($dbname) 
+
+				
+?>
