@@ -1,0 +1,108 @@
+<?php
+//Start a session
+session_start();
+$username = $Password = "";
+$Firstname = $Secondname = $Pass =  "";
+$UN =  $FN = $SN = "";
+?>
+<?php	
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Form Validation
+    if (empty($_POST["Username2"])) { // gets info from field
+        $username = "Enter User Name"; // if it is empty
+    } else {
+        $UN= ($_POST['Username2']); // give it this variable
+    }
+    if (empty($_POST["Password2"])) { // gets info from field
+        $Password = "Enter a password"; // if it is empty
+    } else {
+        $Pass = ($_POST['Password2']); // gives it this variable
+    }
+	if (empty($_POST["FirstName"])) { // gets info from the field
+        $Firstname = "Enter First Name"; // if it is empty
+    } else {
+        $FN= ($_POST['FirstName']); // gives it this variable
+    }
+    if (empty($_POST["SecondName"])) { // gets info from field
+        $Secondname = "Enter a password"; // if it is empty
+    } else {
+        $SN = ($_POST['SecondName']); // gives it this variable
+    }
+	
+}
+
+	if(isset($_POST['Submit'])) // when the submit button is pressed
+{ 
+if ($UN && $FN && $SN && $Pass != null){
+include("Connection.php");  // set the connection
+ 
+ echo "Welcome ".$FN."! You can now log in by clicking on Log In. ";
+ 
+$res =mysqli_query($conn,"CALL New_User('$UN','$Pass', '$FN',  '$SN' )"); 
+// query to enter the new user to the database
+mysqli_close($conn); // close of the connetion
+}
+}
+  
+?>	
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>New User</title>
+
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+   height: 100px;
+  }
+ </style>
+
+
+</head>
+<body>
+
+
+<div class="container1"> 
+<div id="header"></br></br></br> </div>
+<div id="header1"><h1><b>Thank you for Joining Shanballymore GAA</b></h1> </div>
+
+<div class="right">
+<h1>New User:</h1>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+UserName:<br />
+	<input name="Username2" type="text" size="30" maxlength="30" /><span ><?php echo $username ?></span><br />
+Password:<br />
+	<input name="Password2" type="password" size="30" maxlength="30" /><span><?php echo $Password ?></span><br />
+	First Name:<br />
+	<input name="FirstName" type="text" size="30" maxlength="30" /><span><?php echo $Firstname ?></span><br />
+Second Name:<br />
+	<input name="SecondName" type="text" size="30" maxlength="30" /><span><?php echo $Secondname ?></span><br />
+	
+	<input name="Submit" type="submit" value="New User" /><br />
+
+
+</form>
+</br>
+</div>
+<div class= "button1">
+<img src="images/crest.png" width="300" height="280"/>
+</div>
+
+
+Click here to <a href="LoginUser.php"> LOG IN</a></br>
+<div class="Bottom">
+Copyright:2013
+</div>
+ </div>
+
+</body>
+</html>
