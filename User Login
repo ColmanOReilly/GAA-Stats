@@ -1,0 +1,107 @@
+
+<?php
+//Start a session
+session_start();
+
+//Setup and use a tracking variable to count login attempts 
+if(isset($_SESSION['logoncount1'])) {
+}
+
+?>
+
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Welcome</title>
+<link rel="stylesheet" href="CSS/CSS3.css" >
+<link rel="stylesheet" href="CSS/CSS6.css" >
+<link rel="stylesheet" href="CSS/CSS1.css" >
+<style>
+
+#header {
+  margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 100px;
+    height: 100px;
+  }
+ </style>
+</head>
+<body>
+
+
+<div class="container1"> 
+<div id="header"></br></br> </div>
+<div id="header1"><h1><b>Welcome</b></h1> </div>
+<div class="right">
+<h1>Current User:</h1>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+UserName:<br />
+	<input name="Username" type="text" size="30" maxlength="30" /><br />
+Password:<br />
+	<input name="Password" type="password" size="30" maxlength="30" /><br />
+	
+	<input name="Submit" type="submit" style="width:100px; height:30px;" value="Login" /> <br /><br />
+</form>
+	<?php
+if(isset($_POST['Submit']))   //Check if the login form has been submitted FOR THE USER
+{   
+	include("Connection.php"); // open connection
+	
+	//Get the values from the new user form
+	$pw = MD5($_POST['Password']); //Note use of MD5 hash function
+	$username = $_POST['Username'];
+	
+	//Set up and execute the query
+	
+	$result=mysqli_query($conn," CALL User_Login('$username','$pw')");  //Get the query result
+	$num=mysqli_fetch_assoc($result);  //Get number of records returned 
+	
+	if ($num)  //Logon is successful - redirect to restricted home page
+	{
+		$_SESSION['userid1']=$username; //Save the username in a session variable
+		if(isset($_SESSION['Users']))
+			{$_SESSION['Users'] = $_SESSION['Users']+ 1;}
+		else
+			{$_SESSION['Users'] = 1;} //set the session variable views
+			unset($_SESSION['logoncount1']);//Unset the logon tracking count
+			header('Location: HomePage1.php'); //display the restricted page
+			exit();
+	}
+	else	//Logon has failed - reload the logon page
+	{
+		unset($_SESSION['Users']);
+		echo "<h3>Invalid logon attempt_ Please Try Again</h3>";
+	}
+	
+	
+}
+?>
+
+
+Click here to become a <a href="NewUser.php">  NEW USER!</a><br /><br />
+
+
+</div>
+<div class= "button1">
+<img src="images/crest.png" width="300" height="280"/>
+</div>
+Click here to go back to  <a href="Index.html">  Main Page!</a><br /><br />
+<div class="Bottom">
+Copyright: 2013
+</div>
+ </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
