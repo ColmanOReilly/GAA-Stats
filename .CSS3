@@ -1,0 +1,17 @@
+.header {
+   margin-top: 0;
+   background-image: url(images/longbanner.jpg);
+   background-repeat: no-repeat;
+   background-position: top, center 1px;
+   
+  }
+   .header1{
+  color: #181818;
+  }
+  .footer{
+ font-size: 100%;
+color: #000000;
+  line-height: 175%; 
+  text-align: center;
+  background: #808080;
+  }
